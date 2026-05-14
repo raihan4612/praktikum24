@@ -64,6 +64,18 @@
                         <i class="bi bi-people-fill"></i> Data Mahasiswa
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('buku.index') }}"
+                       class="nav-link {{ request()->is('buku*') ? 'active' : '' }}">
+                        <i class="bi bi-book-fill"></i> Data Buku
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('peminjaman.index') }}"
+                       class="nav-link {{ request()->is('peminjaman*') ? 'active' : '' }}">
+                        <i class="bi bi-journal-bookmark-fill"></i> Peminjaman
+                    </a>
+                </li>
 
                 {{-- Menu khusus Admin --}}
                 @if(auth()->user()->isAdmin())

@@ -27,4 +27,10 @@ class Mahasiswa extends Model
         'status',
         'foto',
     ];
+
+    // Relasi ke peminjaman
+    public function peminjaman()
+    {
+        return $this->hasMany(Peminjaman::class, 'mahasiswa_id');
+    }
 }
