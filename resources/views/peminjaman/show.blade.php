@@ -12,14 +12,15 @@
 
 @php
     $badge = match($peminjaman->status) {
-        'Dipinjam' => 'bg-warning text-dark',
+        'Dipinjam'     => 'bg-warning text-dark',
         'Dikembalikan' => 'bg-success',
-        'Terlambat' => 'bg-danger',
-        default => 'bg-secondary'
+        'Terlambat'    => 'bg-danger',
+        default        => 'bg-secondary'
     };
 @endphp
 
 <div class="row g-4">
+    {{-- Kolom Kiri: Info Transaksi --}}
     <div class="col-md-6">
         <div class="card h-100">
             <div class="card-header bg-primary text-white fw-semibold">
@@ -51,8 +52,11 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card mb-3">
+    {{-- Kolom Kanan: Mahasiswa, Buku, Petugas --}}
+    <div class="col-md-6 d-flex flex-column gap-3">
+
+        {{-- Data Mahasiswa --}}
+        <div class="card">
             <div class="card-header bg-success text-white fw-semibold">
                 <i class="bi bi-person-fill me-2"></i>Data Mahasiswa
             </div>
@@ -66,6 +70,7 @@
             </div>
         </div>
 
+        {{-- Data Buku --}}
         <div class="card">
             <div class="card-header bg-info text-white fw-semibold">
                 <i class="bi bi-book-fill me-2"></i>Data Buku
@@ -79,6 +84,26 @@
                 </table>
             </div>
         </div>
+
+        {{-- ← TAMBAHAN: Data Petugas --}}
+        <div class="card">
+            <div class="card-header bg-secondary text-white fw-semibold">
+                <i class="bi bi-person-badge-fill me-2"></i>Petugas yang Melayani
+            </div>
+            <div class="card-body">
+                @if($peminjaman->petugas)
+                    <table class="table table-borderless mb-0">
+                        <tr><th width="40%">Kode</th><td>: {{ $peminjaman->petugas->kode_petugas }}</td></tr>
+                        <tr><th>Nama</th><td>: {{ $peminjaman->petugas->nama }}</td></tr>
+                        <tr><th>Jabatan</th><td>: {{ $peminjaman->petugas->jabatan }}</td></tr>
+                        <tr><th>No. HP</th><td>: {{ $peminjaman->petugas->no_hp ?? '-' }}</td></tr>
+                    </table>
+                @else
+                    <p class="text-muted mb-0">Data petugas tidak tersedia.</p>
+                @endif
+            </div>
+        </div>
+
     </div>
 </div>
 

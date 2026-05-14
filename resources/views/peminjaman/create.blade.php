@@ -20,6 +20,11 @@
         <i class="bi bi-exclamation-triangle me-2"></i>
         Tidak ada buku tersedia saat ini. Silakan periksa stok buku.
     </div>
+@elseif($petugasList->isEmpty())
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        Belum ada petugas aktif. Silakan tambah data petugas terlebih dahulu.
+    </div>
 @else
 <div class="card">
     <div class="card-header bg-primary text-white">
@@ -49,7 +54,6 @@
                     </select>
                     @error('mahasiswa_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
 
-                    {{-- Info mahasiswa --}}
                     <div id="infoMhs" class="mt-2 p-2 rounded bg-light d-none">
                         <small>
                             <span class="text-muted">NIM:</span> <strong id="mhsNim"></strong> &nbsp;|&nbsp;
@@ -78,12 +82,39 @@
                     </select>
                     @error('buku_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
 
-                    {{-- Info buku --}}
                     <div id="infoBuku" class="mt-2 p-2 rounded bg-light d-none">
                         <small>
                             <span class="text-muted">Kode:</span> <strong id="bukuKode"></strong> &nbsp;|&nbsp;
                             <span class="text-muted">Pengarang:</span> <strong id="bukuPengarang"></strong> &nbsp;|&nbsp;
                             <span class="text-muted">Stok Tersedia:</span> <strong id="bukuTersedia" class="text-success"></strong>
+                        </small>
+                    </div>
+                </div>
+
+                {{-- ← TAMBAHAN: Pilih Petugas --}}
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Petugas yang Melayani <span class="text-danger">*</span></label>
+                    <select name="petugas_id" id="petugas_id"
+                            class="form-select @error('petugas_id') is-invalid @enderror"
+                            onchange="tampilInfoPetugas(this)">
+                        <option value="">-- Pilih Petugas --</option>
+                        @foreach($petugasList as $petugas)
+                            <option value="{{ $petugas->id }}"
+                                    data-kode="{{ $petugas->kode_petugas }}"
+                                    data-jabatan="{{ $petugas->jabatan }}"
+                                    data-hp="{{ $petugas->no_hp }}"
+                                    {{ old('petugas_id') == $petugas->id ? 'selected' : '' }}>
+                                {{ $petugas->nama }} — {{ $petugas->kode_petugas }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('petugas_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+
+                    <div id="infoPetugas" class="mt-2 p-2 rounded bg-light d-none">
+                        <small>
+                            <span class="text-muted">Kode:</span> <strong id="petugasKode"></strong> &nbsp;|&nbsp;
+                            <span class="text-muted">Jabatan:</span> <strong id="petugasJabatan"></strong> &nbsp;|&nbsp;
+                            <span class="text-muted">HP:</span> <strong id="petugasHp"></strong>
                         </small>
                     </div>
                 </div>
@@ -131,9 +162,9 @@
 function tampilInfoMhs(sel) {
     const opt = sel.options[sel.selectedIndex];
     if (sel.value) {
-        document.getElementById('mhsNim').textContent    = opt.dataset.nim;
-        document.getElementById('mhsProdi').textContent  = opt.dataset.prodi;
-        document.getElementById('mhsHp').textContent     = opt.dataset.hp;
+        document.getElementById('mhsNim').textContent   = opt.dataset.nim;
+        document.getElementById('mhsProdi').textContent = opt.dataset.prodi;
+        document.getElementById('mhsHp').textContent    = opt.dataset.hp;
         document.getElementById('infoMhs').classList.remove('d-none');
     } else {
         document.getElementById('infoMhs').classList.add('d-none');
@@ -152,6 +183,19 @@ function tampilInfoBuku(sel) {
     }
 }
 
+// ← TAMBAHAN
+function tampilInfoPetugas(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    if (sel.value) {
+        document.getElementById('petugasKode').textContent    = opt.dataset.kode;
+        document.getElementById('petugasJabatan').textContent = opt.dataset.jabatan;
+        document.getElementById('petugasHp').textContent      = opt.dataset.hp;
+        document.getElementById('infoPetugas').classList.remove('d-none');
+    } else {
+        document.getElementById('infoPetugas').classList.add('d-none');
+    }
+}
+
 function hitungMinKembali() {
     const tglPinjam = document.getElementById('tanggal_pinjam').value;
     if (tglPinjam) {
@@ -161,13 +205,14 @@ function hitungMinKembali() {
     }
 }
 
-// Jalankan saat load jika ada old value
 document.addEventListener('DOMContentLoaded', function () {
     hitungMinKembali();
-    const mhsSel = document.getElementById('mahasiswa_id');
-    const bukuSel = document.getElementById('buku_id');
-    if (mhsSel.value)  tampilInfoMhs(mhsSel);
-    if (bukuSel.value) tampilInfoBuku(bukuSel);
+    const mhsSel     = document.getElementById('mahasiswa_id');
+    const bukuSel    = document.getElementById('buku_id');
+    const petugasSel = document.getElementById('petugas_id');
+    if (mhsSel.value)     tampilInfoMhs(mhsSel);
+    if (bukuSel.value)    tampilInfoBuku(bukuSel);
+    if (petugasSel.value) tampilInfoPetugas(petugasSel);
 });
 </script>
 @endsection

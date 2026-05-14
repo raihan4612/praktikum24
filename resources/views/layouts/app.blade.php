@@ -76,6 +76,12 @@
                         <i class="bi bi-journal-bookmark-fill"></i> Peminjaman
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('petugas.index') }}"
+                    class="nav-link {{ request()->is('petugas*') ? 'active' : '' }}">
+                        <i class="bi bi-person-workspace"></i> Data Petugas
+                    </a>
+                </li>                
 
                 {{-- Menu khusus Admin --}}
                 @if(auth()->user()->isAdmin())

@@ -13,6 +13,7 @@ class Peminjaman extends Model
         'kode_peminjaman',
         'mahasiswa_id',
         'buku_id',
+        'petugas_id',           // ← tambahan
         'tanggal_pinjam',
         'tanggal_kembali_rencana',
         'tanggal_kembali_aktual',
@@ -37,5 +38,11 @@ class Peminjaman extends Model
     public function buku()
     {
         return $this->belongsTo(Buku::class, 'buku_id');
+    }
+
+    // Relasi ke petugas
+    public function petugas()
+    {
+        return $this->belongsTo(Petugas::class, 'petugas_id');
     }
 }

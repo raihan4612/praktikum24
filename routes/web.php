@@ -6,6 +6,7 @@ use App\Http\Controllers\HakAksesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PetugasController;
 
 // ─── Auth Routes (tanpa login) ───────────────────────────────────────────────
 Route::get('/',       [AuthController::class, 'showLogin'])->name('login');
@@ -61,5 +62,14 @@ Route::middleware('auth')->group(function () {
         Route::get('edit-hak-akses/{id}',       [HakAksesController::class, 'edit'])   ->name('edit-hak-akses');
         Route::put('update-hak-akses/{id}',     [HakAksesController::class, 'update']) ->name('update-hak-akses');
         Route::delete('hapus-hak-akses/{id}',   [HakAksesController::class, 'destroy'])->name('hapus-hak-akses');
+
+                // Petugas - full CRUD (admin only)
+        Route::get('petugas-list',          [PetugasController::class, 'index'])  ->name('petugas.index');
+        Route::get('petugas-detail/{id}',   [PetugasController::class, 'show'])   ->name('petugas.show');
+        Route::get('petugas-create',        [PetugasController::class, 'create']) ->name('petugas.create');
+        Route::post('petugas-simpan',       [PetugasController::class, 'store'])  ->name('petugas.store');
+        Route::get('petugas-edit/{id}',     [PetugasController::class, 'edit'])   ->name('petugas.edit');
+        Route::put('petugas-update/{id}',   [PetugasController::class, 'update']) ->name('petugas.update');
+        Route::delete('petugas-hapus/{id}', [PetugasController::class, 'destroy'])->name('petugas.destroy');
     });
 });
